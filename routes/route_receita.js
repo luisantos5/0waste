@@ -61,5 +61,5 @@ router.put('/receitas/:id_receita')
 router.put('/receitas/visualizacoes/:id_receita')
 router.put('receitas/pontuacoes/:id_receita')
 //fazer fora 
-router.get(categroias)
+router.get(categorias)
 module.exports = router

@@ -6,7 +6,7 @@ const sequelize = new Sequelize('joaoferr_SIC_21_22_IND2', 'joaoferr_SIC_21_22_I
 })
 const Utilizador = require('./models/model_utilizador');
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
     console.log("Request Arrived")

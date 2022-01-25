@@ -30,7 +30,7 @@ const list = (res) => {
         }
     })
 }
-//cosnt receitasbyname ou recitasbyuser?
+
 const getReceitasByName = (req, res) => {
     receita.findAll({tituloReceita: req.params.tituloReceita}, function (err, receitas) {
         if (err) {
@@ -60,8 +60,35 @@ const getReceitasById = (req, res) => {
     })
 }
 
+const update = (req, res) => {
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.receita, salt, function (err, hash) {
+
+            //aplicar este excerto de codigo a todas os update que fizer
+            jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
+                let username = decoded.data.utilizador; 
+                utilizador.update({
+                    "receita": hash
+                }, {
+                    where: { username: username } //token
+                },).then((result) => {
+                    console.log(result)
+                    res.status(200).send("Receita alterada com sucesso!");
+                }).catch((error) => {
+                    res.status(400).send(error);
+                })
+            })
+
+            
+        })
+    })
+}
+
+
+
 exports.create = create;
 exports.list = list;
 exports.getReceitasByName = getReceitasByName;
 exports.getReceitasByUser= getReceitasByUser;
 exports.getReceitasById = getReceitasById;
+exports.update = update;

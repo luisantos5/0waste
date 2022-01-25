@@ -7,15 +7,11 @@ const sequelize = new Sequelize('joaoferr_SIC_21_22_IND2', 'joaoferr_SIC_21_22_I
 class Utilizador extends Model {}
 
 Utilizador.init({
-    id_utilizador: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true
-    },
+    username: DataTypes.STRING,
     password: DataTypes.STRING,
     nome: DataTypes.STRING,
     data_nascimento: DataTypes.DATE,
-    is_admin: DataTypes.BOOLEAN
+    is_admin: DataTypes.BOOLEAN 
 }, { sequelize, modelName: 'utilizador' });
 
 sequelize.sync().then().catch(error => {

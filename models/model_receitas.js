@@ -7,7 +7,6 @@ const sequelize = new Sequelize('joaoferr_SIC_21_22_IND2', 'joaoferr_SIC_21_22_I
 class Receitas extends Model {}
 
 Receitas.init({
-    id_receita: DataTypes.NUMBER,
     id_utilizador: DataTypes.STRING,
     receita: DataTypes.STRING,
     visualizacoes: DataTypes.NUMBER

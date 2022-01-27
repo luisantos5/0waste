@@ -9,7 +9,7 @@ class Receitas extends Model {}
 Receitas.init({
     id_utilizador: DataTypes.STRING,
     receita: DataTypes.STRING,
-    visualizacoes: DataTypes.NUMBER
+    visualizacoes: DataTypes.INTEGER
 }, { sequelize, modelName: 'receitas' });
 
 sequelize.sync().then().catch(error => {

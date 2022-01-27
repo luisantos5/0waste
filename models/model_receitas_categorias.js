@@ -7,8 +7,8 @@ const sequelize = new Sequelize('joaoferr_SIC_21_22_IND2', 'joaoferr_SIC_21_22_I
 class Receitas_Categorias extends Model {}
 
 Receitas_Categorias.init({
-    id_receita: DataTypes.NUMBER,
-    id_categoria: DataTypes.NUMBER
+    id_receita: DataTypes.INTEGER,
+    id_categoria: DataTypes.INTEGER
 }, { sequelize, modelName: 'receitas_categorias' });
 
 sequelize.sync().then().catch(error => {

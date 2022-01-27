@@ -34,7 +34,6 @@ const login = (req, res) => {
 const create = (req, res) => {
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
-
             const utilizadorToCreate = new utilizador({
                 username: req.body.username,
                 password: hash,
@@ -43,8 +42,10 @@ const create = (req, res) => {
                 is_admin: false
             });
 
-            utilizador.findOne({
-                "username": req.body.username
+            utilizador.findOne({ 
+                where : {
+                    "username": req.body.username
+                }
             }).then((result) => {
                 console.log(result);
                 if(result && result.id > 0) {

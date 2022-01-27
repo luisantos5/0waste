@@ -1,34 +1,46 @@
 const receita = require('../models/model_receitas')
+var jwt = require('jsonwebtoken');
+const secret = "aqXQ8ZUtCFPTAxWs"
+const utilizador = require("../models/model_utilizador");
 
 const create = (req, res) => {
-    
-    const receitaToCreate = new receita({
-        id_utilizador: req.body.id_utilizador,
-        tituloReceita: req.body.tituloReceita,   //ATUALIZAr
-        receita: req.body.receita,
-        visualizacoes: 0  //DUVIDA
-        // fazer routa put para atualizar couunt com id_receita i++
 
-    });
+    jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
+        let username = decoded.data.utilizador; 
+        utilizador.findAll({
+            where: { username: username } 
+        },).then((result) => {
+            if(result && result[0].id) {
+                let newReceita = {
+                    id_utilizador: result[0].id,
+                    tituloReceita: req.body.tituloReceita, 
+                    receita: req.body.receita,
+                    visualizacoes: 0  
+                };
 
-    receitaToCreate.save(function (err, newReceita) {
-        if (err) {
-            res.status(400).send(err);
-        } else {
-            res.status(200).json(newReceita);
-        }
+                receita.create(newReceita).then((result) => {
+                    res.status(200).json(result);
+                }).catch((error) => {
+                    console.log(error)
+                })
+            } else {
+                res.status(401).send("Not authorized")
+            }
+        }).catch((error) => {
+            res.status(400).send(error);
+        })
     })
 
 }
 
 const list = (res) => {
-    receita.findAll(function (err, receitas) {
+   /*  receita.findAll(function (err, receitas) {
         if (err) {
             res.status(400).send(err);
         }else {
             res.status(200).json(receitas);
         }
-    })
+    }) */
 }
 
 const getReceitasByName = (req, res) => {

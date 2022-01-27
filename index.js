@@ -5,9 +5,10 @@ const sequelize = new Sequelize('joaoferr_SIC_21_22_IND2', 'joaoferr_SIC_21_22_I
     dialect: 'mysql'
 })
 const utilizador = require('./routes/route_utilizador');
+const receitas = require('./routes/route_receita');
 const app = express()
 /* const port = process.env.PORT || 3000 */
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 const utilities = require('./utilities/utilities')
 
 const auth = function(req, res, next) {
@@ -29,6 +30,8 @@ const auth = function(req, res, next) {
 app.use(express.json());
 app.use(auth);
 app.use('/', utilizador) 
+app.use('/receitas', receitas) 
+
 
 app.get('/', (req, res) => {
     console.log("Request Arrived")

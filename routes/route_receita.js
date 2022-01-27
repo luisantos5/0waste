@@ -1,13 +1,13 @@
 var express = require('express')
 var router = express.Router()
 var controller = require('../controllers/controller_receita')
-const { validationResult, body} = require('express-validator')
+const { validationResult, body, param} = require('express-validator')
 
 
 
-router.post('/novareceita', [
+router.post('/', [
     
-    body('passtituloReceitaword').notEmpty().isString().isLength({ min: 5 }),
+    body('tituloReceita').notEmpty().isString().isLength({ min: 5 }),
     body('receita').isString().notEmpty().escape(), 
      ///router vizualizações//
 
@@ -20,7 +20,7 @@ router.post('/novareceita', [
     }
 })
 
-router.get('/receitas/:id_receita', [
+router.get('/:id_receita', [
     param('id_receita').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
@@ -31,7 +31,7 @@ router.get('/receitas/:id_receita', [
     }
 }) 
 
-router.get('/receitas/:id_utilizador', [
+router.get('/users/:id_utilizador', [
     param('pesquisa').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
@@ -42,7 +42,7 @@ router.get('/receitas/:id_utilizador', [
     }
 })
 //param?? controller?
-router.delete('/receitas/:id_receita', [
+router.delete('/:id_receita', [
     param('id_receita').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
@@ -53,7 +53,7 @@ router.delete('/receitas/:id_receita', [
     }
 })
 //alterar puts
-router.put('/receitas/:id_receita', [
+router.put('/:id_receita', [
     param('id_receita').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 

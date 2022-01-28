@@ -19,7 +19,7 @@ router.post('/register', [
     body('username').notEmpty().escape().exists(),
     body('password').notEmpty().isString().isLength({ min: 8 }),
     body('nome').isString().notEmpty().escape(),
-    body('data_nascimento').isString().notEmpty().escape()    
+    body('data_nascimento').isString().notEmpty().escape()
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
@@ -29,8 +29,8 @@ router.post('/register', [
     }
 })
 
-router.get('/listar/:id_utilizador', [
-    param('id_utilizador').notEmpty().escape(),
+router.get('/listar/:username', [
+    param('username').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
@@ -40,12 +40,13 @@ router.get('/listar/:id_utilizador', [
     }
 })
 
-router.put('/', [
+router.put('/updatepassword', [
+    body('username').notEmpty().escape().exists(),
     body('password').notEmpty().isString().isLength({ min: 8 }),   
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
-        controller.update(req, res);  //create?
+        controller.update(req, res);
     } else {
         res.status(404).json({errors: errors.array()})
     }

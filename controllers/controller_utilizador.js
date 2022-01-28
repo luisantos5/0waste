@@ -71,7 +71,7 @@ const create = (req, res) => {
 
 }
 
-const update = (req, res) => {
+/* const update = (req, res) => {
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
 
@@ -93,8 +93,64 @@ const update = (req, res) => {
             
         })
     })
-}
+} */
 
+const update = (req, res) => {
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.password, salt, function (err, hash) {
+            const passwordToUpdate = new password({
+                username: req.body.username,
+                password: hash
+            });
+            utilizador.findOne({
+                where: {
+                    "username": req.body.username
+                }
+            }).then((result) => {
+                console.log(result);
+                if(result && result.id > 0) {
+                    jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
+                        let username = decoded.data.utilizador; 
+                        utilizador.update({
+                            "password": hash
+                        }, {
+                            where: { username: username } //token
+                        },).then((result) => {
+                            console.log(result)
+                            res.status(200).send("Password alterada com sucesso!");
+                        }).catch((error) => {
+                            res.status(400).send(error);
+                        })
+                    })
+                    /* passwordToUpdate.save().then((result) => {
+                        res.status(200).json({
+                            message: "Password updated",
+                            object: result
+                        });
+                    }).catch((error) => {
+                        res.status(400).send(error);
+                    }) */
+                }
+            })
+           /*  //aplicar este excerto de codigo a todas os update que fizer
+            jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
+                let username = decoded.data.utilizador; 
+                utilizador.update({
+                    "password": hash
+                }, {
+                    where: { username: username } //token
+                },).then((result) => {
+                    console.log(result)
+                    res.status(200).send("Password alterada com sucesso!");
+                }).catch((error) => {
+                    res.status(400).send(error);
+                })
+            }) */
+
+            
+        })
+    })
+}
 
 const list = (res) => {
     utilizador.find(function (err, utilizadores) {
@@ -106,7 +162,7 @@ const list = (res) => {
 }
 
 const getUtilizadoresByName = (req, res) => {
-    utilizador.find({ name: req.params.name }, function (err, utilizadores) {
+    utilizador.find({ username: req.params.username }, function (err, utilizadores) {
         if (err) {
             res.status(400).send(err);
         }

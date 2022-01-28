@@ -8,9 +8,7 @@ const { validationResult, body, param} = require('express-validator')
 router.post('/', [
     
     body('tituloReceita').notEmpty().isString().isLength({ min: 5 }),
-    body('receita').isString().notEmpty().escape(), 
-     ///router vizualizações//
-
+    body('receita').isString().notEmpty().escape()
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {

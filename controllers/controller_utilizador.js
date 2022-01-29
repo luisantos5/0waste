@@ -10,7 +10,7 @@ const salt = "L{vSUaf5vb~_=d/v"
 //login
 const login = (req, res) => {
 
-    utilizador.findAll({ username: req.body.username }).then((result) => {
+    utilizador.findAll({where: { username: req.body.username }}).then((result) => {
         if (result.length > 0) {
             bcrypt.compare(req.body.password, result[0].password).then(function (hash) {
                 if (hash) {

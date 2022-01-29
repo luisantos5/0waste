@@ -6,48 +6,31 @@ const utilizador = require("../models/model_utilizador");
 
 const create = (req, res) => {
 
-    /*     jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
-            let username = decoded.data.utilizador; 
-            utilizador.findAll({
-                where: { username: username } 
-            },).then((result) => {
-                if(result && result[0].id) {
-                    let newReceita = {
-                        id_utilizador: result[0].id,
-                        tituloReceita: req.body.tituloReceita, 
-                        receita: req.body.receita,
-                        visualizacoes: 0  
-                    };
-    
-                    receita.create(newReceita).then((result) => {
-                        res.status(200).json(result);
-                    }).catch((error) => {
-                        console.log(error)
-                    })
-                } else {
-                    res.status(401).send("Not authorized")
-                }
-            }).catch((error) => {
-                res.status(400).send(error);
-            })
-        }) */
+    jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
+        let username = decoded.data.utilizador; 
+        utilizador.findAll({
+            where: { username: username } 
+        },).then((result) => {
+            if(result && result[0].id) {
+                let newReceita = {
+                    id_utilizador: result[0].id,
+                    tituloReceita: req.body.tituloReceita, 
+                    receita: req.body.receita,
+                    visualizacoes: 0  
+                };
 
-    const receitaToCreate = new receita({
-        id_utilizador: result[0].id,
-        tituloReceita: req.body.tituloReceita,
-        receita: req.body.receita,
-        visualizacoes: 0
-    });
-    receitaToCreate.save().then((result) => {
-        res.status(200).json({
-            message: "Receita adicionada",
-            object: result
+                receita.create(newReceita).then((result) => {
+                    res.status(200).json(result);
+                }).catch((error) => {
+                    console.log(error)
+                })
+            } else {
+                res.status(401).send("Not authorized")
+            }
+        }).catch((error) => {
+            res.status(400).send(error);
         })
-    }).catch((error) => {
-        res.status(400).send(error);
     })
-
-
 }
 
 const list = (res) => {

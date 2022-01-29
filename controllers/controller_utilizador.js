@@ -10,7 +10,7 @@ const salt = "L{vSUaf5vb~_=d/v"
 //login
 const login = (req, res) => {
 
-    utilizador.findAll({where: { username: req.body.username }}).then((result) => {
+    utilizador.findAll({ where: { username: req.body.username } }).then((result) => {
         if (result.length > 0) {
             bcrypt.compare(req.body.password, result[0].password).then(function (hash) {
                 if (hash) {
@@ -42,18 +42,18 @@ const create = (req, res) => {
                 is_admin: false
             });
 
-            utilizador.findOne({ 
-                where : {
+            utilizador.findOne({
+                where: {
                     "username": req.body.username
                 }
             }).then((result) => {
                 console.log(result);
-                if(result && result.id > 0) {
+                if (result && result.id > 0) {
                     res.status(406).send("Utilizador já existente");
                 } else {
                     utilizadorToCreate.save().then((result) => {
                         res.status(200).json({
-                            message: "Registered User", 
+                            message: "Registered User",
                             object: result
                         });
                     }).catch((error) => {
@@ -95,62 +95,42 @@ const create = (req, res) => {
     })
 } */
 
+
 const update = (req, res) => {
-    bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(req.body.password, salt, function (err, hash) {
-            const passwordToUpdate = new password({
-                username: req.body.username,
-                password: hash
-            });
-            utilizador.findOne({
-                where: {
-                    "username": req.body.username
-                }
-            }).then((result) => {
-                console.log(result);
-                if(result && result.id > 0) {
-                    jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
-                        let username = decoded.data.utilizador; 
-                        utilizador.update({
-                            "password": hash
-                        }, {
-                            where: { username: username } //token
-                        },).then((result) => {
-                            console.log(result)
-                            res.status(200).send("Password alterada com sucesso!");
-                        }).catch((error) => {
-                            res.status(400).send(error);
-                        })
-                    })
-                    /* passwordToUpdate.save().then((result) => {
-                        res.status(200).json({
-                            message: "Password updated",
-                            object: result
-                        });
-                    }).catch((error) => {
-                        res.status(400).send(error);
-                    }) */
-                }
-            })
-           /*  //aplicar este excerto de codigo a todas os update que fizer
-            jwt.verify(req.headers.authorization.replace('Bearer ', ''), secret, function(error, decoded) {
-                let username = decoded.data.utilizador; 
-                utilizador.update({
-                    "password": hash
-                }, {
-                    where: { username: username } //token
-                },).then((result) => {
-                    console.log(result)
+
+    utilizadors.findOne({
+        username: req.body.username
+    }, function (err, utilizador) {
+        if (err) {
+            res.status(400).send(err)
+        }
+        if (utilizador) {
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(req.body.password, salt, function (err, hash) {
+                    utilizador.password = hash
+                    utilizador.update
                     res.status(200).send("Password alterada com sucesso!");
+                });
+            });
+        }
+    })
+} 
+
+/* const update = (req, res) => {
+
+    utilizador.findByPk(req.body.username)
+        .then((utilizador) => {
+            utilizador
+                .update(req.body, { where: { password: req.body.password } })
+                .then((result) => {
+                    res.status(200).send("Password alterada com sucesso!")
                 }).catch((error) => {
                     res.status(400).send(error);
-                })
-            }) */
-
-            
+                });
+    
         })
-    })
-}
+} */
+
 
 const list = (res) => {
     utilizador.find(function (err, utilizadores) {
@@ -162,13 +142,18 @@ const list = (res) => {
 }
 
 const getUtilizadoresByName = (req, res) => {
-    utilizador.find({ username: req.params.username }, function (err, utilizadores) {
-        if (err) {
-            res.status(400).send(err);
-        }
-        res.status(200).json(utilizadores);
-    })
+    utilizador.findAll({
+        where: {
+            nome: req.query.nome
+        },
+    }).then((list) => {
+        res.status(200).json(list)
+    }).catch((error) => {
+        console.log(error);
+        res.status(400).send("Error");
+    });
 }
+
 
 exports.login = login;
 exports.create = create;

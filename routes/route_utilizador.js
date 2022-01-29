@@ -29,7 +29,7 @@ router.post('/register', [
     }
 })
 
-router.get('/listar/:username', [
+router.get('/:username', [
     param('username').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
@@ -40,7 +40,7 @@ router.get('/listar/:username', [
     }
 })
 
-router.put('/updatepassword', [
+router.put('/', [
     body('username').notEmpty().escape().exists(),
     body('password').notEmpty().isString().isLength({ min: 8 }),   
 ],  function (req, res) {

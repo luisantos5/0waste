@@ -18,19 +18,19 @@ router.post('/', [
     }
 })
 
-router.get('/:id_receita', [
-    param('id_receita').notEmpty().escape(),
+router.get('/:tituloReceita', [
+    param('tituloReceita').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
-        controller.getReceitasByUser = (req, res)
+        controller.getReceitasByName = (req, res)
     } else {
         res.status(404).json({errors: errors.array()})
     }
 }) 
 
-router.get('/users/:id_utilizador', [
-    param('pesquisa').notEmpty().escape(),
+router.get('/id_utilizador', [
+    param('id_utilizador').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
@@ -39,9 +39,9 @@ router.get('/users/:id_utilizador', [
         res.status(404).json({errors: errors.array()})
     }
 })
-//param?? controller?
-router.delete('/:id_receita', [
-    param('id_receita').notEmpty().escape(),
+
+router.get('/id', [
+    param('id').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
@@ -50,9 +50,22 @@ router.delete('/:id_receita', [
         res.status(404).json({errors: errors.array()})
     }
 })
-//alterar puts
-router.put('/:id_receita', [
-    param('id_receita').notEmpty().escape(),
+
+router.delete('/:id', [
+    param('id').notEmpty().escape(),
+],  function (req, res) {
+    const errors = validationResult(req); 
+    if (errors.isEmpty()) {
+        controller.deleteReceita = (req, res)
+    } else {
+        res.status(404).json({errors: errors.array()})
+    }
+})
+
+router.put('/:id', [
+    param('id').notEmpty().escape(),
+    body('id').notEmpty().escape(),
+    body('receita').notEmpty().escape(),
 ],  function (req, res) {
     const errors = validationResult(req); 
     if (errors.isEmpty()) {
